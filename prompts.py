@@ -1,11 +1,11 @@
 import json
 
-NUM_FUN_FACTS = 3
 NUM_RELATED_TOPICS = 5
+TARGET_TOPIC_LENGTH = "1-4 words"
 
 
-def create_fun_facts_prompt(topic):
-    return f"Give me {NUM_FUN_FACTS} fun fact(s) about {topic}."
+def create_fun_facts_prompt(topic, num_fun_facts):
+    return f"Give me {num_fun_facts} fun fact(s) about {topic}."
 
 
 def _get_topic_associations():
@@ -20,9 +20,10 @@ def create_related_topics_prompt(source_topic):
 
     output += (
         f"Please note the structure of the original topic and related topics. "
-        f"The length of each related topic is typically only 1-4 words long. "
+        f"The length of each related topic is typically only {TARGET_TOPIC_LENGTH} words long. "
         f"Now please give me {NUM_RELATED_TOPICS} interesting topics that are related "
-        f"to the original topic of {source_topic}. Each related topic should only be 1-4 words long. "
+        f"to the original topic of {source_topic}. "
+        f"Each related topic should only be {TARGET_TOPIC_LENGTH} words long. "
         f"Do not give any introduction in your response, "
         f"please directly just give me the related topics in numbered format."
     )

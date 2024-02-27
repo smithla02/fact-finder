@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify
 from openai import OpenAI
 from dotenv import load_dotenv
 from prompts import create_fun_facts_prompt, create_related_topics_prompt
+import random
 
 # Load environment variables
 load_dotenv()
@@ -16,7 +17,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TOPIC_ASSOCIATIONS_FILE = os.getenv(
     "TOPIC_ASSOCIATIONS_FILE", "topic_associations.json"
 )
-PORT = int(os.getenv("PORT", 8000))
+FLASK_PORT = int(os.getenv("FLASK_PORT", 8000))
 
 # Configure logging
 logging.basicConfig(
@@ -34,7 +35,7 @@ def get_db_connection():
     return conn
 
 
-def fetch_openai_data(topic):
+def fetch_openai_data(topic, num_fun_facts):
     try:
         client = OpenAI()
         OpenAI.api_key = os.getenv("OPENAI_API_KEY")
@@ -44,7 +45,7 @@ def fetch_openai_data(topic):
                 "No OpenAI API key set. Please set the OPENAI_API_KEY environment variable."
             )
 
-        prompt = create_fun_facts_prompt(topic)
+        prompt = create_fun_facts_prompt(topic, num_fun_facts)
 
         logging.debug("--Sending request to OPENAI--")
         logging.debug(f"prompt = {prompt}")
@@ -97,11 +98,12 @@ def fetch_openai_data(topic):
 @app.route("/get_facts", methods=["POST"])
 def get_facts():
     topic = request.json.get("topic")
+    num_fun_facts = request.json.get("num_fun_facts")
     logger.debug(f"Received request for topic: {topic}")
 
     with get_db_connection() as conn:
         c = conn.cursor()
-        facts, related_topics = fetch_openai_data(topic)
+        facts, related_topics = fetch_openai_data(topic, num_fun_facts)
 
         c.execute("SELECT * FROM facts WHERE topic = ?", (topic,))
         row = c.fetchone()
@@ -120,10 +122,21 @@ def get_facts():
     return jsonify({"topic": topic, "facts": facts, "related_topics": related_topics})
 
 
+@app.route("/get_random_topic", methods=["POST"])
+def get_random_topic():
+    topics_and_associations = {}
+    with open("topic_associations.json", "r") as f:
+        topics_and_associations = json.load(f)
+    topics = list(topics_and_associations.keys())
+    random_topic = random.choice(topics)
+
+    return jsonify({"random_topic": random_topic})
+
+
 if __name__ == "__main__":
     with get_db_connection() as conn:
         conn.execute(
             """CREATE TABLE IF NOT EXISTS facts (topic TEXT PRIMARY KEY, facts TEXT, related_topics TEXT)"""
         )
         conn.commit()
-    app.run(port=PORT, debug=True)
+    app.run(port=FLASK_PORT, debug=True)
