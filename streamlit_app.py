@@ -77,6 +77,10 @@ def display_related_topics(data):
                 st.rerun()
 
 
+def save_search_topic(search_topic):
+    st.session_state["current_topic"] = search_topic
+
+
 def main():
     update_current_topic()
 
@@ -111,17 +115,13 @@ def main():
     )
 
     # Adjust the layout to separate the Search and Random Topic buttons
-    if st.button("Search"):
-        st.session_state["current_topic"] = search_topic
+    st.button("Search", on_click=save_search_topic(search_topic))
 
     st.button(
         "**🎲 Can't Decide? Get a Random Topic!**",
         help="Click to get a random fun fact topic",
-        on_click=fetch_random_topic(),
+        on_click=fetch_random_topic,
     )
-
-    # Optionally, add a visual divider
-    st.markdown("---")
 
     if st.session_state.get("current_topic"):
         data = fetch_facts(
