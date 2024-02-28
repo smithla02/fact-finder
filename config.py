@@ -1,7 +1,8 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
 
-# Load environemnt variables
+# Load environment variables
 load_dotenv()
 
 # Use environment variables or defaults
@@ -9,7 +10,13 @@ FLASK_PORT = int(os.getenv("FLASK_PORT", 8000))
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "facts.db")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Check for OPENAI_API_KEY in environment variables, otherwise use st.secrets
+OPENAI_API_KEY = (
+    os.getenv("OPENAI_API_KEY")
+    if os.getenv("OPENAI_API_KEY")
+    else st.secrets["OPENAI_API_KEY"]
+)
 
 TOPIC_ASSOCIATIONS_FILE = os.getenv(
     "TOPIC_ASSOCIATIONS_FILE", "topic_associations.json"
