@@ -19,7 +19,7 @@ def setup_logging():
 
 
 def update_current_topic():
-    """Update current_topic based on what was clicked before app refresh"""
+    """Update current_topic by checking if related topic was clicked, which triggers app refresh"""
     for related_topic, clicked in st.session_state.items():
         if clicked is True:
             st.session_state["current_topic"] = related_topic.split(". ")[1]
@@ -67,6 +67,12 @@ def display_facts(data, topic):
         st.write(fact)
 
 
+def get_random_topic():
+    random_topic = fetch_random_topic()
+    if random_topic:
+        st.session_state["current_topic"] = random_topic
+
+
 def display_related_topics(data):
     """Display buttons for related topics."""
     st.subheader("Explore fun facts on related topics:")
@@ -74,17 +80,7 @@ def display_related_topics(data):
     for idx, related_topic in enumerate(data.get("related_topics", [])):
         with cols[idx]:
             if st.button(related_topic.title(), key=related_topic):
-                st.session_state["current_topic"] = related_topic.split(". ")[1].title()
-                logging.debug(
-                    f"Updated st.session_state.current_topic to = {related_topic.split('. ')[1].title()}"
-                )
                 st.rerun()
-
-
-def get_random_topic():
-    random_topic = fetch_random_topic()
-    if random_topic:
-        st.session_state["current_topic"] = random_topic
 
 
 def main():
