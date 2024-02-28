@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, String, MetaData, select, and_
+from sqlalchemy import text
 import streamlit as st
 import json
 import logging
@@ -6,15 +6,27 @@ import logging
 # Assuming the connection name 'facts_db' is defined in your .streamlit/secrets.toml
 conn = st.connection("facts_db", type="sql")
 
-metadata = MetaData()
-facts_table = Table(
-    "facts",
-    metadata,
-    Column("topic", String, primary_key=True),
-    Column("persona", String, primary_key=True),
-    Column("facts", String),
-    Column("related_topics", String),
-)
+
+def create_facts_table():
+    with conn.session as session:
+        session.execute(
+            text(
+                """
+            CREATE TABLE IF NOT EXISTS facts (
+                topic TEXT,
+                persona TEXT,
+                facts TEXT,
+                related_topics TEXT,
+                PRIMARY KEY (topic, persona)
+            );
+        """
+            )
+        )
+        session.commit()
+
+
+# Ensure the table is created before any operations are performed
+create_facts_table()
 
 
 def standardize_primary_key(topic, persona):
@@ -23,27 +35,40 @@ def standardize_primary_key(topic, persona):
 
 def save_facts_to_db(topic, persona, facts, related_topics):
     try:
-        # Use the connection's managed session for database operations
         with conn.session as session:
-            # Assuming facts_table is reflected or otherwise available
             topic, persona = standardize_primary_key(topic, persona)
-            existing_entry = (
-                session.query(facts_table)
-                .filter_by(topic=topic, persona=persona)
-                .first()
-            )
+            # Check if the entry exists
+            existing_entry = session.execute(
+                text("SELECT * FROM facts WHERE topic = :topic AND persona = :persona"),
+                {"topic": topic, "persona": persona},
+            ).fetchone()
+
             if existing_entry:
-                existing_entry.facts = json.dumps(facts)
-                existing_entry.related_topics = json.dumps(related_topics)
+                # Update existing entry
+                session.execute(
+                    text(
+                        "UPDATE facts SET facts = :facts, related_topics = :related_topics WHERE topic = :topic AND persona = :persona"
+                    ),
+                    {
+                        "topic": topic,
+                        "persona": persona,
+                        "facts": json.dumps(facts),
+                        "related_topics": json.dumps(related_topics),
+                    },
+                )
             else:
-                # Assuming facts_table is mapped correctly for insertions
-                new_entry = {
-                    "topic": topic,
-                    "persona": persona,
-                    "facts": json.dumps(facts),
-                    "related_topics": json.dumps(related_topics),
-                }
-                session.execute(facts_table.insert(), new_entry)
+                # Insert new entry
+                session.execute(
+                    text(
+                        "INSERT INTO facts (topic, persona, facts, related_topics) VALUES (:topic, :persona, :facts, :related_topics)"
+                    ),
+                    {
+                        "topic": topic,
+                        "persona": persona,
+                        "facts": json.dumps(facts),
+                        "related_topics": json.dumps(related_topics),
+                    },
+                )
             session.commit()
     except Exception as e:
         logging.error(f"Error saving facts to database: {e}")
@@ -52,10 +77,10 @@ def save_facts_to_db(topic, persona, facts, related_topics):
 def get_facts_from_db(topic, persona):
     topic, persona = standardize_primary_key(topic, persona)
     with conn.session as session:
-        query = select(facts_table).where(
-            and_(facts_table.c.topic == topic, facts_table.c.persona == persona)
-        )
-        result = session.execute(query).fetchone()
+        result = session.execute(
+            text("SELECT * FROM facts WHERE topic = :topic AND persona = :persona"),
+            {"topic": topic, "persona": persona},
+        ).fetchone()
         if result:
             return json.loads(result.facts), json.loads(result.related_topics)
         else:
