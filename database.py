@@ -3,8 +3,12 @@ import streamlit as st
 import json
 import logging
 
-# Assuming the connection name 'facts_db' is defined in your .streamlit/secrets.toml
-conn = st.connection("facts_db", type="sql")
+# Deployed on cloud
+if st.secrets.get("connections.facts_db").get("url"):
+    conn = st.connection(st.secrets.get("connections.facts_db").get("url"), type="sql")
+# Deployed locally
+else:
+    conn = st.connection("facts_db", type="sql")
 
 
 def create_facts_table():
