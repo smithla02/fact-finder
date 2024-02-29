@@ -4,7 +4,7 @@ Welcome to the Fun Facts Streamlit App repository. This app fetches and displays
 
 ## Using the deployed app
 
-The app is deployed using Streamlit cloud here: https://funfacts.streamlit.app/
+The app is deployed using Streamlit cloud, and can be accessed here: https://funfacts.streamlit.app/
 
 ## Features
 
