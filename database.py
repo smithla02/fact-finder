@@ -3,14 +3,7 @@ import streamlit as st
 import json
 import logging
 
-# Get the facts_db connection details from secrets if deployed on cloud
-facts_db_connection = st.secrets.get("FACTS_DB_URL")
-
-# Check if the connection details exist and get the URL if it does
-db_url = facts_db_connection if facts_db_connection else "facts_db"
-
-# Establish the connection
-conn = st.connection(db_url, type="sql")
+conn = st.connection("facts_db", type="sql")
 
 
 def create_facts_table():
