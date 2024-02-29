@@ -1,12 +1,21 @@
+"""
+database.py: Contains functions for database operations such as creating tables and saving/fetching data.
+"""
+
 from sqlalchemy import text
 import streamlit as st
 import json
 import logging
+from typing import Tuple, Optional
 
+# Database information, such as `url`, will be populated from `secrets.toml` file
 conn = st.connection("facts_db", type="sql")
 
 
-def create_facts_table():
+def create_facts_table() -> None:
+    """
+    Creates the 'facts' table in the database if it does not already exist.
+    """
     with conn.session as session:
         session.execute(
             text(
@@ -28,11 +37,19 @@ def create_facts_table():
 create_facts_table()
 
 
-def standardize_primary_key(topic, persona):
+def standardize_primary_key(topic: str, persona: str) -> Tuple[str, str]:
+    """
+    Standardizes the primary key values for consistent database storage.
+    """
     return str.lower(topic), str.lower(persona)
 
 
-def save_facts_to_db(topic, persona, facts, related_topics):
+def save_facts_to_db(
+    topic: str, persona: str, facts: list, related_topics: list
+) -> None:
+    """
+    Saves or updates fun facts and related topics in the database.
+    """
     try:
         with conn.session as session:
             topic, persona = standardize_primary_key(topic, persona)
@@ -73,7 +90,12 @@ def save_facts_to_db(topic, persona, facts, related_topics):
         logging.error(f"Error saving facts to database: {e}")
 
 
-def get_facts_from_db(topic, persona):
+def get_facts_from_db(
+    topic: str, persona: str
+) -> Tuple[Optional[list], Optional[list]]:
+    """
+    Retrieves fun facts and related topics from the database.
+    """
     topic, persona = standardize_primary_key(topic, persona)
     with conn.session as session:
         result = session.execute(

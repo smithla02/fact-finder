@@ -1,3 +1,7 @@
+"""
+streamlit_app.py: Main application file for the Streamlit app.
+"""
+
 import streamlit as st
 import json
 import logging
@@ -14,14 +18,19 @@ from database import save_facts_to_db, get_facts_from_db
 from openai_retrieval import fetch_openai_data
 import random
 import re
+from typing import Dict, Optional
 
+# Configure logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=LOG_LEVEL, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
 
-def update_current_topic():
+def update_current_topic() -> None:
+    """
+    Updates the current topic based on user interaction.
+    """
     logger.debug(f"Update current topic, st.session_state: {st.session_state}")
     for related_topic, clicked in st.session_state.items():
         if related_topic not in ("search_topic", "current_topic") and clicked:
@@ -31,7 +40,12 @@ def update_current_topic():
                 st.session_state["current_topic"] = match.group(0)
 
 
-def fetch_facts(topic, num_facts, selected_persona):
+def fetch_facts(
+    topic: str, num_facts: int, selected_persona: str
+) -> Dict[str, Optional[list]]:
+    """
+    Fetches fun facts for a given topic and persona, either from cache or by querying OpenAI.
+    """
     # Check if the facts are already in the database
     cached_facts, cached_related_topics = get_facts_from_db(topic, selected_persona)
     if cached_facts and cached_related_topics:
@@ -48,13 +62,19 @@ def fetch_facts(topic, num_facts, selected_persona):
     return {"topic": topic, "facts": facts, "related_topics": related_topics}
 
 
-def display_facts(data, topic):
+def display_facts(data: Dict[str, list], topic: str) -> None:
+    """
+    Displays fun facts for a given topic.
+    """
     st.subheader(f"{topic.title()}")
     for fact in data.get("facts", []):
         st.write(fact)
 
 
-def fetch_random_topic():
+def fetch_random_topic() -> None:
+    """
+    Fetches a random topic from the topics file.
+    """
     try:
         with open(TOPICS_FILE, "r") as f:
             topics = json.load(f)["topics"]
@@ -68,7 +88,10 @@ def fetch_random_topic():
         )
 
 
-def display_related_topics(data):
+def display_related_topics(data: Dict[str, list]) -> None:
+    """
+    Displays buttons for related topics.
+    """
     st.subheader("Explore fun facts on related topics:")
     cols = st.columns(len(data.get("related_topics", [])))
     for idx, related_topic in enumerate(data.get("related_topics", [])):
@@ -77,11 +100,17 @@ def display_related_topics(data):
                 st.rerun()
 
 
-def save_search_topic(search_topic):
+def save_search_topic(search_topic: str) -> None:
+    """
+    Saves the searched topic to session state.
+    """
     st.session_state["current_topic"] = search_topic
 
 
-def main():
+def main() -> None:
+    """
+    Main function to run the Streamlit app.
+    """
     update_current_topic()
 
     _, col2, _ = st.columns([1, 6, 1])

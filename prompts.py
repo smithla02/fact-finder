@@ -1,3 +1,7 @@
+"""
+prompts.py: Constructs prompts for querying OpenAI based on the application's needs.
+"""
+
 import json
 import logging
 from config import (
@@ -9,6 +13,9 @@ from config import (
 
 
 def create_persona_prompt(persona):
+    """
+    Creates a persona-specific prompt for querying OpenAI.
+    """
     prompt = ""
     if persona not in RESPONSE_PERSONAS:
         logging.error("Persona not found")
@@ -38,15 +45,24 @@ def create_persona_prompt(persona):
 
 
 def create_fun_facts_prompt(topic, num_fun_facts):
+    """
+    Creates a prompt for fetching fun facts about a specific topic.
+    """
     return f"Give me {num_fun_facts} fun fact(s) about {topic}."
 
 
 def _get_topic_associations():
+    """
+    Helper function to load topic associations from a file.
+    """
     with open(TOPIC_ASSOCIATIONS_FILE, "r") as f:
         return json.load(f)
 
 
 def create_related_topics_prompt(source_topic):
+    """
+    Creates a prompt for fetching related topics based on a source topic.
+    """
     output = "I will provide some examples of an original topic and related topics."
     for topic, related_topics in _get_topic_associations().items():
         output += f"Original topic: {topic}, Related topics: {related_topics}"
