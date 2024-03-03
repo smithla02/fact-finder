@@ -1,6 +1,6 @@
 # Fun Facts Streamlit App
 
-Welcome to the Fun Facts Streamlit App repository. This app fetches and displays fun facts based on user-selected topics and personas, leveraging OpenAI's GPT models for content generation and SQLAlchemy for data persistence.
+Welcome to the Fun Facts Streamlit App repository. This app fetches and displays fun facts based on user-selected topics and personas, leveraging OpenAI's GPT models for content generation and [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy) for data persistence, and [Streamlit](https://github.com/streamlit/streamlit) as a front end.
 
 ## Using the deployed app
 
@@ -19,15 +19,91 @@ The app is deployed using Streamlit cloud, and can be accessed here: https://fun
 - `config.py`: Configuration settings for the application, including environment variables.
 - `openai_retrieval.py`: Handles fetching data from OpenAI.
 - `prompts.py`: Constructs prompts for querying OpenAI.
-- `.streamlit/secrets.toml`: (Not included in the repository for security reasons) Contains sensitive information like database credentials and API keys.
 
 ## Prerequisites
 
+To run in Docker:
+- [Docker](https://docs.docker.com/get-docker/)
+
+To run locally:
 - Python 3.8+
 - pip
 - Virtual environment (recommended)
+- Docker (for containerization)
 
-## Setting Up the Environment
+### Exporting `OPENAI_API_KEY` as an environment variable
+
+**To run this app in Docker or locally, you must have your own `OPENAI_API_KEY`.**
+
+Instructions for setting up an `OPENAI_API_KEY` can be found [here](https://platform.openai.com/docs/quickstart).
+
+To export your `OPENAI_API_KEY` to your `.zshrc` or `.bashrc` file to have them available for any terminal session, you can use the following commands.
+
+#### Exporting to `.zshrc` or `.bashrc` File:
+
+1. **Exporting the Environment Variable**:
+   - For `.zshrc` (Zsh shell):
+     ```bash
+     echo 'export OPENAI_API_KEY=your_openai_api_key_here' >> ~/.zshrc
+     ```
+   - For `.bashrc` (Bash shell):
+     ```bash
+     echo 'export OPENAI_API_KEY=your_openai_api_key_here' >> ~/.bashrc
+     ```
+
+2. **Reloading the Shell Configuration**:
+   - For Zsh:
+     ```bash
+     source ~/.zshrc
+     ```
+   - For Bash:
+     ```bash
+     source ~/.bashrc
+     ```
+
+#### Exporting in a Single Terminal Session:
+
+If you want to export the `OPENAI_API_KEY` in a single terminal session without modifying the shell configuration files, you can do it directly in the terminal:
+
+```bash
+export OPENAI_API_KEY=your_openai_api_key_here
+```
+
+This command sets the `OPENAI_API_KEY` environment variable for the current terminal session. Remember that this approach will only persist for the duration of that terminal session.
+
+## Running the App with Docker
+
+To run the Fun Facts Streamlit App using Docker, you can pull the pre-built image from Docker Hub and run it in a container.
+
+### Pulling the Docker Image
+
+Pull the latest version of the Fun Facts Streamlit App image from Docker Hub:
+
+```bash
+docker pull smithla02/funfactsapp:v1.0
+```
+
+### Running the Docker Container
+
+Run the Docker container, passing your `OPENAI_API_KEY` as an environment variable and mapping port 8501 for access:
+
+```bash
+docker run -e OPENAI_API_KEY -p 8501:8501 smithla02/funfactsapp:v1.0
+```
+
+### Accessing the App
+
+After starting the container, open your web browser and navigate to `http://localhost:8501` to view the app.
+
+### Stopping the Container
+
+To stop the running container, find the container using `docker ps | grep 'funfactsapp'`, then stop it using `docker stop <container_id>`.
+
+Make sure to replace `smithla02/funfactsapp:v1.0` with the correct Docker Hub repository and tag for your image.
+
+## Running the App Locally
+
+### Setting Up the Environment
 
 1. Clone the repository to your local machine.
 2. Navigate to the project directory.
@@ -39,36 +115,12 @@ The app is deployed using Streamlit cloud, and can be accessed here: https://fun
    - **Windows**: `.\venv\Scripts\activate`
 5. Install the required dependencies: `pip install -r requirements.txt`
 
-## Running the Streamlit App Locally
+### Running the Streamlit App
 
 With the environment set up and activated, run the Streamlit app using:
 
 ```bash
 streamlit run streamlit_app.py
-```
-
-## Configuring `.streamlit/secrets.toml`
-
-To run the app, you need to create a `.streamlit/secrets.toml` file in the root of your project with your database credentials and OpenAI API key. Here's a template:
-
-```toml
-[database]
-url = "sqlite:///your_database_path.db"
-
-[openai]
-api_key = "your_openai_api_key"
-```
-
-Replace `your_database_path.db` with the path to your SQLite database file and `your_openai_api_key` with your actual OpenAI API key.
-
-## Environment Variables
-
-The `config.py` file loads environment variables for configuration. You can set these variables in a `.env` file at the root of the project. Here's an example `.env` file:
-
-```env
-LOG_LEVEL=DEBUG
-DATABASE_NAME=facts.db
-OPENAI_API_KEY=your_openai_api_key
 ```
 
 ## Contributing

@@ -12,9 +12,6 @@ load_dotenv()
 # Logging configuration
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")  # Default log level
 
-# Database configuration
-DATABASE_NAME = os.getenv("DATABASE_NAME", "facts.db")  # Default database name
-
 # OpenAI API configuration
 # Check for OPENAI_API_KEY in environment variables, otherwise use st.secrets
 OPENAI_API_KEY = (
