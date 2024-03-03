@@ -22,9 +22,9 @@ OPENAI_API_KEY = (
 
 # File paths for topic associations and topics
 TOPIC_ASSOCIATIONS_FILE = os.getenv(
-    "TOPIC_ASSOCIATIONS_FILE", "topic_associations.json"
+    "TOPIC_ASSOCIATIONS_FILE", "data/topic_associations.json"
 )
-TOPICS_FILE = os.getenv("TOPICS_FILE", "topics.json")
+TOPICS_FILE = os.getenv("TOPICS_FILE", "data/topics.json")
 
 # OpenAI model configuration
 GPT_MODEL = os.getenv("GPT_MODEL", "gpt-3.5-turbo")  # Default GPT model
@@ -51,6 +51,7 @@ RESPONSE_PERSONAS = [
 ]
 
 # TODO: Add Fun Fact Categories
+
 # FUN_FACT_CATEGORIES = ['All', 'Nature', 'Internet', 'Business', 'Spooky', 'Psychology',
 # 'Movies', 'Love', 'Funny', 'Animals', 'Universe', 'Celebrities', 'For Kids', 'World', 'Science',
 # 'Life Hacks', 'Technology', 'Human Body', 'Food', 'Sex', 'United States', 'Trivia', 'Sports',

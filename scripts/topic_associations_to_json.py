@@ -1,4 +1,5 @@
 import json
+from config import TOPIC_ASSOCIATIONS_FILE
 
 topic_associations = {
     "basketball": [
@@ -177,5 +178,5 @@ topic_associations = {
 }
 
 # Writing JSON data
-with open("../topic_associations.json", "w") as f:
+with open(f"../{TOPIC_ASSOCIATIONS_FILE}", "w") as f:
     json.dump(topic_associations, f, indent=4)

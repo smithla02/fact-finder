@@ -19,6 +19,9 @@ The app is deployed using Streamlit cloud, and can be accessed here: https://fun
 - `config.py`: Configuration settings for the application, including environment variables.
 - `openai_retrieval.py`: Handles fetching data from OpenAI.
 - `prompts.py`: Constructs prompts for querying OpenAI.
+- `Dockefile`: Contains information about building a Docker image for the repository.
+- `.pre-commit-config.yaml`: Contains linting and formatting commit hooks for maintaining consistency in this repository
+- `data/`: Contains information about topics and topic associations.
 
 ## Prerequisites
 
@@ -98,8 +101,6 @@ After starting the container, open your web browser and navigate to `http://loca
 ### Stopping the Container
 
 To stop the running container, find the container using `docker ps | grep 'funfactsapp'`, then stop it using `docker stop <container_id>`.
-
-Make sure to replace `smithla02/funfactsapp:v1.0` with the correct Docker Hub repository and tag for your image.
 
 ## Running the App Locally
 
