@@ -44,11 +44,11 @@ def create_persona_prompt(persona):
     return prompt
 
 
-def create_fun_facts_prompt(topic, num_fun_facts):
+def create_fun_facts_prompt(topic, num_facts):
     """
     Creates a prompt for fetching fun facts about a specific topic.
     """
-    return f"Give me {num_fun_facts} fun fact(s) about {topic}."
+    return f"Give me {num_facts} fun fact(s) about {topic}."
 
 
 def _get_topic_associations():

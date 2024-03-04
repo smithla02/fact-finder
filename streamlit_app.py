@@ -41,13 +41,15 @@ def update_current_topic() -> None:
 
 
 def fetch_facts(
-    topic: str, num_facts: int, selected_persona: str
+    topic: str, selected_persona: str, num_facts: int
 ) -> Dict[str, Optional[list]]:
     """
     Fetches fun facts for a given topic and persona, either from cache or by querying OpenAI.
     """
     # Check if the facts are already in the database
-    cached_facts, cached_related_topics = get_facts_from_db(topic, selected_persona)
+    cached_facts, cached_related_topics = get_facts_from_db(
+        topic, selected_persona, num_facts
+    )
     if cached_facts and cached_related_topics:
         logger.debug(f"Retrieved cached facts for topic: {topic}")
         return {
@@ -57,8 +59,8 @@ def fetch_facts(
         }
 
     # If not in the database, fetch from OpenAI and save to the database
-    facts, related_topics = fetch_openai_data(topic, num_facts, selected_persona)
-    save_facts_to_db(topic, selected_persona, facts, related_topics)
+    facts, related_topics = fetch_openai_data(topic, selected_persona, num_facts)
+    save_facts_to_db(topic, selected_persona, facts, related_topics, num_facts)
     return {"topic": topic, "facts": facts, "related_topics": related_topics}
 
 
@@ -121,8 +123,8 @@ def main() -> None:
         )
 
     st.markdown("### **Choose how many fun facts:**")
-    num_fun_facts = st.slider(
-        "num_fun_facts",
+    num_facts = st.slider(
+        "num_facts",
         MINIMUM_FUN_FACTS,
         MAXIMUM_FUN_FACTS,
         DEFAULT_FUN_FACTS,
@@ -153,9 +155,7 @@ def main() -> None:
     )
 
     if st.session_state.get("current_topic"):
-        data = fetch_facts(
-            st.session_state.current_topic, num_fun_facts, selected_persona
-        )
+        data = fetch_facts(st.session_state.current_topic, selected_persona, num_facts)
         if data:
             display_facts(data, st.session_state.current_topic)
             display_related_topics(data)

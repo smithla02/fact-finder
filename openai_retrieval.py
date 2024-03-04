@@ -14,7 +14,7 @@ from typing import Tuple, List
 
 
 def fetch_openai_data(
-    topic: str, num_fun_facts: int, persona: str
+    topic: str, persona: str, num_facts: int
 ) -> Tuple[List[str], List[str]]:
     """
     Fetches fun facts and related topics from OpenAI based on the given topic and persona.
@@ -23,7 +23,7 @@ def fetch_openai_data(
         client = OpenAI()
         OpenAI.api_key = OPENAI_API_KEY
         persona_prompt = create_persona_prompt(persona)
-        fun_facts_prompt = create_fun_facts_prompt(topic, num_fun_facts)
+        fun_facts_prompt = create_fun_facts_prompt(topic, num_facts)
 
         # Fetch fun facts
         response = client.chat.completions.create(

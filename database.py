@@ -1,7 +1,7 @@
 import streamlit as st
 import json
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Text
+from sqlalchemy import Column, String, Text, Integer
 
 Base = declarative_base()
 
@@ -12,6 +12,7 @@ class Facts(Base):
     persona = Column(String, primary_key=True, index=True)
     facts = Column(Text)
     related_topics = Column(Text)
+    num_facts = Column(Integer)
 
 
 def init_db():
@@ -26,21 +27,25 @@ def init_db():
 db_conn = init_db()
 
 
-def get_facts_from_db(topic: str, persona: str):
+def get_facts_from_db(topic: str, persona: str, num_facts: int):
     with db_conn.session as session:
-        # Use the ORM's query capabilities instead of raw SQL
         facts_instance = (
-            session.query(Facts).filter_by(topic=topic, persona=persona).first()
+            session.query(Facts)
+            .filter_by(topic=topic, persona=persona, num_facts=num_facts)
+            .first()
         )
         if facts_instance:
-            return json.loads(facts_instance.facts), json.loads(
-                facts_instance.related_topics
+            return (
+                json.loads(facts_instance.facts),
+                json.loads(facts_instance.related_topics),
             )
         else:
             return None, None
 
 
-def save_facts_to_db(topic: str, persona: str, facts: list, related_topics: list):
+def save_facts_to_db(
+    topic: str, persona: str, facts: list, related_topics: list, num_facts: int
+):
     with db_conn.session as session:
         existing_fact = (
             session.query(Facts)
@@ -50,12 +55,14 @@ def save_facts_to_db(topic: str, persona: str, facts: list, related_topics: list
         if existing_fact:
             existing_fact.facts = json.dumps(facts)
             existing_fact.related_topics = json.dumps(related_topics)
+            existing_fact.num_facts = num_facts  # Add this line
         else:
             new_facts = Facts(
                 topic=topic,
                 persona=persona,
                 facts=json.dumps(facts),
                 related_topics=json.dumps(related_topics),
+                num_facts=num_facts,  # Add this line
             )
             session.add(new_facts)
         session.commit()
