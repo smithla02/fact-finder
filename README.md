@@ -85,15 +85,15 @@ To run the Fun Facts Streamlit App using Docker, you can pull the pre-built imag
 Pull the latest version of the Fun Facts Streamlit App image from Docker Hub:
 
 ```bash
-docker pull smithla02/funfactsapp:v1.0
+docker pull smithla02/funfactsapp
 ```
 
 ### Running the Docker Container
 
-Run the Docker container, passing your `OPENAI_API_KEY` as an environment variable and mapping port 8501 for access:
+To run the Docker container and open in your browser, pass the `OPENAI_API_KEY` as an environment variable and map port 8501 for access:
 
 ```bash
-docker run -e OPENAI_API_KEY -p 8501:8501 smithla02/funfactsapp:v1.0
+docker run -e OPENAI_API_KEY -p 8501:8501 smithla02/funfactsapp & sleep 2 && open http://localhost:8501
 ```
 
 ### Accessing the App
