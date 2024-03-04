@@ -16,12 +16,13 @@ The app is deployed using Streamlit cloud, and can be accessed here: https://fun
 
 The project has the following structure:
 
-- `streamlit_app.py`: The main Streamlit application file.
-- `database.py`: Contains SQLAlchemy database operations for storing and retrieving fun facts.
-- `config.py`: Configuration settings for the application, including environment variables.
-- `openai_retrieval.py`: Handles fetching data from OpenAI.
-- `prompts.py`: Constructs prompts for querying OpenAI.
-- `Dockefile`: Contains information about building a Docker image for the repository.
+- `app/`: Directory containing the main application logic.
+  - `streamlit_app.py`: The main Streamlit application file.
+  - `database.py`: Contains SQLAlchemy database operations for storing and retrieving fun facts.
+  - `config.py`: Configuration settings for the application, including environment variables.
+  - `openai_retrieval.py`: Handles fetching data from OpenAI.
+  - `prompts.py`: Constructs prompts for querying OpenAI.
+- `Dockerfile`: Contains information about building a Docker image for the repository.
 - `.pre-commit-config.yaml`: Contains linting and formatting commit hooks for maintaining consistency in this repository
 - `data/`: Contains information about topics and topic associations.
 
