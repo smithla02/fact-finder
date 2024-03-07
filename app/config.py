@@ -29,10 +29,10 @@ TOPICS_FILE = os.getenv("TOPICS_FILE", "data/topics.json")
 # OpenAI model configuration
 GPT_MODEL = os.getenv("GPT_MODEL", "gpt-3.5-turbo")  # Default GPT model
 
-# Fun facts configuration
-MINIMUM_FUN_FACTS = 1
-MAXIMUM_FUN_FACTS = 10
-DEFAULT_FUN_FACTS = 3
+# Facts configuration
+MINIMUM_FACTS = 1
+MAXIMUM_FACTS = 10
+DEFAULT_FACTS = 3
 
 # Topics configuration
 TARGET_TOPIC_LENGTH = "1-4 words"
@@ -49,10 +49,3 @@ RESPONSE_PERSONAS = [
     "Hippie",
     "California Valley Girl",
 ]
-
-# TODO: Add Fun Fact Categories
-
-# FUN_FACT_CATEGORIES = ['All', 'Nature', 'Internet', 'Business', 'Spooky', 'Psychology',
-# 'Movies', 'Love', 'Funny', 'Animals', 'Universe', 'Celebrities', 'For Kids', 'World', 'Science',
-# 'Life Hacks', 'Technology', 'Human Body', 'Food', 'Sex', 'United States', 'Trivia', 'Sports',
-# 'Language', 'History']

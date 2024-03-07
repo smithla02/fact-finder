@@ -5,7 +5,7 @@ openai_retrieval.py: Handles data retrieval from OpenAI based on given prompts.
 from openai import OpenAI
 from config import OPENAI_API_KEY, GPT_MODEL
 from prompts import (
-    create_fun_facts_prompt,
+    create_facts_prompt,
     create_related_topics_prompt,
     create_persona_prompt,
 )
@@ -22,30 +22,28 @@ def process_response(response: dict) -> List[str]:
     return output
 
 
-def fetch_fun_facts(
-    client: OpenAI, topic: str, persona: str, num_facts: int
-) -> List[str]:
+def fetch_facts(client: OpenAI, topic: str, persona: str, num_facts: int) -> List[str]:
     """
-    Fetches fun facts from OpenAI based on the given topic and persona.
+    Fetches facts from OpenAI based on the given topic and persona.
     """
     try:
         persona_prompt = create_persona_prompt(persona)
-        fun_facts_prompt = create_fun_facts_prompt(topic, num_facts)
+        facts_prompt = create_facts_prompt(topic, num_facts)
 
-        # Fetch fun facts
+        # Fetch facts
         response = client.chat.completions.create(
             model=GPT_MODEL,
             messages=[
                 {"role": "system", "content": persona_prompt},
-                {"role": "user", "content": fun_facts_prompt},
+                {"role": "user", "content": facts_prompt},
             ],
         )
 
         facts = process_response(response)
         return facts
     except Exception as e:
-        logging.error(f"Error fetching fun facts from OpenAI: {e}")
-        return ["An exception occurred while fetching fun facts."]
+        logging.error(f"Error fetching facts from OpenAI: {e}")
+        return ["An exception occurred while fetching facts."]
 
 
 def fetch_related_topics(client: OpenAI, topic: str) -> List[str]:
@@ -78,16 +76,16 @@ def fetch_openai_data(
     topic: str, persona: str, num_facts: int
 ) -> Tuple[List[str], List[str]]:
     """
-    Fetches fun facts and related topics from OpenAI based on the given topic and persona.
+    Fetches facts and related topics from OpenAI based on the given topic and persona.
     """
     try:
         client = OpenAI()
         OpenAI.api_key = OPENAI_API_KEY
-        facts = fetch_fun_facts(client, topic, persona, num_facts)
+        facts = fetch_facts(client, topic, persona, num_facts)
         related_topics = fetch_related_topics(client, topic)
         return facts, related_topics
     except Exception as e:
         logging.error(f"Error fetching data from OpenAI: {e}")
-        return ["An exception occurred while fetching fun facts."], [
+        return ["An exception occurred while fetching facts."], [
             "An exception occurred while fetching related topics."
         ]

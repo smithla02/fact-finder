@@ -44,9 +44,9 @@ def create_persona_prompt(persona):
     return prompt
 
 
-def create_fun_facts_prompt(topic, num_facts):
+def create_facts_prompt(topic, num_facts):
     """
-    Creates a prompt for fetching fun facts about a specific topic.
+    Creates a prompt for fetching  facts about a specific topic.
     """
     return f"Give me {num_facts} fun fact(s) about {topic}."
 

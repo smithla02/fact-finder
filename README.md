@@ -1,15 +1,15 @@
-# Fun Facts Streamlit App
+# Fact Finder Streamlit App
 
-Welcome to the Fun Facts Streamlit App repository. This app fetches and displays fun facts based on user-selected topics and personas, leveraging OpenAI's GPT models for content generation and [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy) for data persistence, and [Streamlit](https://github.com/streamlit/streamlit) as a front end.
+Welcome to the Fact Finder Streamlit App repository. This app fetches and displays facts based on user-selected topics and personas, leveraging OpenAI's GPT models for content generation and [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy) for data persistence, and [Streamlit](https://github.com/streamlit/streamlit) as a front end.
 
 ## Using the deployed app
 
-The app is deployed using Streamlit cloud, and can be accessed here: https://funfacts.streamlit.app/
+The app is deployed using Streamlit cloud, and can be accessed here: https://fact-finder.streamlit.app/
 
 ## Features
 
-- Fetch fun facts from OpenAI based on selected topics and personas.
-- Cache fun facts in a SQLite database for quick retrieval.
+- Fetch facts from OpenAI based on selected topics and personas.
+- Cache facts in a SQLite database for quick retrieval.
 - User interface built with Streamlit for an interactive experience.
 
 ## Project Structure
@@ -18,7 +18,7 @@ The project has the following structure:
 
 - `app/`: Directory containing the main application logic.
   - `streamlit_app.py`: The main Streamlit application file.
-  - `database.py`: Contains SQLAlchemy database operations for storing and retrieving fun facts.
+  - `database.py`: Contains SQLAlchemy database operations for storing and retrieving facts.
   - `config.py`: Configuration settings for the application, including environment variables.
   - `openai_retrieval.py`: Handles fetching data from OpenAI.
   - `prompts.py`: Constructs prompts for querying OpenAI.
@@ -79,14 +79,14 @@ This command sets the `OPENAI_API_KEY` environment variable for the current term
 
 ## Running the App with Docker
 
-To run the Fun Facts Streamlit App using Docker, you can pull the pre-built image from Docker Hub and run it in a container.
+To run the Fact Finder Streamlit App using Docker, you can pull the pre-built image from Docker Hub and run it in a container.
 
 ### Pulling the Docker Image
 
-Pull the latest version of the Fun Facts Streamlit App image from Docker Hub:
+Pull the latest version of the Fact Finder Streamlit App image from Docker Hub:
 
 ```bash
-docker pull smithla02/funfactsapp
+docker pull smithla02/fact-finder
 ```
 
 ### Running the Docker Container
@@ -94,7 +94,7 @@ docker pull smithla02/funfactsapp
 To run the Docker container and open in your browser, pass the `OPENAI_API_KEY` as an environment variable and map port 8501 for access:
 
 ```bash
-docker run -e OPENAI_API_KEY -p 8501:8501 smithla02/funfactsapp & sleep 2 && open http://localhost:8501
+docker run -e OPENAI_API_KEY -p 8501:8501 smithla02/fact-finder & sleep 2 && open http://localhost:8501
 ```
 
 ### Accessing the App
@@ -103,7 +103,7 @@ After starting the container, open your web browser and navigate to `http://loca
 
 ### Stopping the Container
 
-To stop the running container, find the container using `docker ps | grep 'funfactsapp'`, then stop it using `docker stop <container_id>`.
+To stop the running container, find the container using `docker ps | grep 'fact-finder'`, then stop it using `docker stop <container_id>`.
 
 ## Running the App Locally
 

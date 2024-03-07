@@ -6,9 +6,9 @@ import streamlit as st
 import json
 import logging
 from config import (
-    MINIMUM_FUN_FACTS,
-    MAXIMUM_FUN_FACTS,
-    DEFAULT_FUN_FACTS,
+    MINIMUM_FACTS,
+    MAXIMUM_FACTS,
+    DEFAULT_FACTS,
     RESPONSE_PERSONAS,
     TOPICS_FILE,
     LOG_LEVEL,
@@ -44,7 +44,7 @@ def fetch_facts(
     topic: str, selected_persona: str, num_facts: int
 ) -> Dict[str, Optional[list]]:
     """
-    Fetches fun facts for a given topic and persona, either from cache or by querying OpenAI.
+    Fetches facts for a given topic and persona, either from cache or by querying OpenAI.
     """
     # Check if the facts are already in the database
     cached_facts, cached_related_topics = get_facts_from_db(
@@ -66,7 +66,7 @@ def fetch_facts(
 
 def display_facts(data: Dict[str, list], topic: str) -> None:
     """
-    Displays fun facts for a given topic.
+    Displays facts for a given topic.
     """
     st.subheader(f"{topic.title()}")
     for fact in data.get("facts", []):
@@ -94,7 +94,7 @@ def display_related_topics(data: Dict[str, list]) -> None:
     """
     Displays buttons for related topics.
     """
-    st.subheader("Explore fun facts on related topics:")
+    st.subheader("Explore facts on related topics:")
     cols = st.columns(len(data.get("related_topics", [])))
     for idx, related_topic in enumerate(data.get("related_topics", [])):
         with cols[idx]:
@@ -118,16 +118,16 @@ def main() -> None:
     _, col2, _ = st.columns([1, 6, 1])
     with col2:
         st.markdown(
-            "<h1 style='text-align: center;'>Fun Fact Finder!</h1>",
+            "<h1 style='text-align: center;'>Fact Finder!</h1>",
             unsafe_allow_html=True,
         )
 
-    st.markdown("### **Choose how many fun facts:**")
+    st.markdown("### **Choose how many facts:**")
     num_facts = st.slider(
         "num_facts",
-        MINIMUM_FUN_FACTS,
-        MAXIMUM_FUN_FACTS,
-        DEFAULT_FUN_FACTS,
+        MINIMUM_FACTS,
+        MAXIMUM_FACTS,
+        DEFAULT_FACTS,
         label_visibility="hidden",
     )
 
@@ -150,7 +150,7 @@ def main() -> None:
 
     st.button(
         "**🎲 Can't Decide? Get a Random Topic!**",
-        help="Click to get a random fun fact topic",
+        help="Click to get a random topic",
         on_click=fetch_random_topic,
     )
 
