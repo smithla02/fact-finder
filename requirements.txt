@@ -10,7 +10,7 @@ async-lru==2.0.4
 attrs==23.2.0
 babel==2.14.0
 beautifulsoup4==4.12.3
-black==24.2.0
+black==24.3.0
 bleach==6.1.0
 blinker==1.7.0
 cachetools==5.3.3
