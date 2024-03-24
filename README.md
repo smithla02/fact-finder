@@ -37,15 +37,15 @@ To run locally:
 - Virtual environment (recommended)
 - Docker (for containerization)
 
-### Exporting `OPENAI_API_KEY` as an environment variable
+### Exporting 'OPENAI_API_KEY' as an environment variable
 
-**To run this app in Docker or locally, you must have your own `OPENAI_API_KEY`.**
+**To run this app in Docker or locally, you must have your own 'OPENAI_API_KEY'.**
 
-Instructions for setting up an `OPENAI_API_KEY` can be found [here](https://platform.openai.com/docs/quickstart).
+- Instructions for setting up an `OPENAI_API_KEY` can be found [here](https://platform.openai.com/docs/quickstart).
 
-To export your `OPENAI_API_KEY` to your `.zshrc` or `.bashrc` file to have them available for any terminal session, you can use the following commands.
+- To export your `OPENAI_API_KEY` to your `.zshrc` or `.bashrc` file to have them available for any terminal session, you can use the following commands.
 
-#### Exporting to `.zshrc` or `.bashrc` File:
+#### Exporting to '.zshrc' or '.bashrc' File:
 
 1. **Exporting the Environment Variable**:
    - For `.zshrc` (Zsh shell):
